@@ -1,52 +1,114 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мой капитал</title>
-    <style>
-        body {
-            background-color: #0d0d0d;
-            color: #00ff66; /* Денежно-зеленый цвет */
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Courier New', Courier, monospace;
-            text-align: center;
-        }
-
-        .block {
-            margin: 15px 0;
-        }
-
-        .label {
-            font-size: 1rem;
-            color: #888;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .value {
-            font-size: 2.2rem;
-            font-weight: bold;
-            letter-spacing: 2px;
-            text-shadow: 0 0 20px rgba(0, 255, 102, 0.4);
-        }
-
-        @media (max-width: 600px) {
-            .value {
-                font-size: 1.6rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scrooge Vault</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #0b0e14;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      padding: 40px 30px;
+      width: 100%;
+      max-width: 450px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .block {
+      margin-bottom: 35px;
+    }
+    .block:last-child {
+      margin-bottom: 0;
+    }
+    .label {
+      font-size: 0.85rem;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .amount {
+      font-size: 3rem;
+      font-weight: 800;
+      color: #f3ba2f; /* Золотой цвет */
+      letter-spacing: -0.5px;
+      line-height: 1;
+    }
+    .timer {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #58a6ff; /* Синий цвет */
+      letter-spacing: -0.5px;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
 </head>
 <body>
 
-    <!-- Блок накопленной суммы -->
+  <div class="card">
+    <!-- БЛОК СУММЫ -->
     <div class="block">
-        <div class="label">Собрано капитала</div>
-        <div class="value" id="money">0 $</div> </div>      <!-- Блок обратного отсчета --> <div class="block"> <div class="label">До конца 2026 года</div> <div class="value" id="timer">00д 00ч 00м 00с</div> </div>      <script> // === ИЗМЕНЯЙТЕ ЭТУ СУММУ ПО МЕРЕ РОСТА КАПИТАЛА === const currentMoney = "1 500 $
+      <div class="label">Remaining to Target</div>
+      <div class="amount" id="sum">...</div>
+    </div>
+
+    <!-- БЛОК ТАЙМЕРА -->
+    <div class="block">
+      <div class="label">Time Remaining</div>
+      <div class="timer" id="timer">...</div>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // ⚙️ НАСТРОЙКА СУММЫ (меняй только здесь):
+    const REMAINING_AMOUNT = 999785;
+    // ==========================================
+
+    // Вывод суммы в формате $999,785
+    document.getElementById("sum").innerText = "$" + REMAINING_AMOUNT.toLocaleString('en-US');
+
+    // Таймер обратного отсчета до 31 декабря 2026 года 23:59:59
+    const targetDate = new Date("December 31, 2026 23:59:59").getTime();
+
+    function updateTimer() {
+      const now = new Date().getTime();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        document.getElementById("timer").innerText = "Goal Achieved!";
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById("timer").innerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    updateTimer();
+    setInterval(updateTimer, 1000);
+  </script>
+
+</body>
+</html>
